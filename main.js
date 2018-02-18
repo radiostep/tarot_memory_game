@@ -31,11 +31,14 @@ Tarot = {
 
 
         let desk = document.getElementById("theGame");
+        let cardsImages = "";
         desk.className = "desk";
         for ( let i = 0; i < feald.length; i++ ) {
-            desk.innerHTML = desk.innerHTML + "<img src=img/Tarot/"+ feald[i].imgPath +">";
+            if (feald[i]) {
+                cardsImages = cardsImages + "<img src=img/Tarot/"+ feald[i].imgPath +">";
+            }
         }
-        
+        desk.innerHTML = cardsImages;
 
         //    Буфер выборки пользователя, куда записывается
         //    активная(кликнутая) карта
