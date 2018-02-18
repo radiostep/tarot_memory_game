@@ -35,7 +35,7 @@ Tarot = {
         desk.className = "desk";
         for ( let i = 0; i < feald.length; i++ ) {
             if (feald[i]) {
-                cardsImages = cardsImages + "<img src=img/Tarot/"+ feald[i].imgPath +">";
+                cardsImages = cardsImages + "<img class='card' src=img/Tarot/"+ feald[i].imgPath +">";
             }
         }
         desk.innerHTML = cardsImages;

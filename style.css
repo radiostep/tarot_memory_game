@@ -2,3 +2,21 @@
     margin: 0;
     padding: 0;
 }
+
+.desk
+{
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    background-color: darkgreen;
+    /* width: 100%;
+    height: 100%; */
+
+}
+
+.card
+{
+    padding: 6px;
+    margin: 12px;
+    background-color: antiquewhite;
+    border-radius: 6px; 
+}
