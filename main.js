@@ -34,16 +34,27 @@ Tarot = {
         let cardsImages = "";
         desk.className = "desk";
         let cardsOnDesk = [];
+        let active = -1;
         for ( let i = 0; i < feald.length; i++ ) {
             if (feald[i]) {
                 cardsOnDesk[i] = document.createElement('div');
-                cardsOnDesk[i].innerHTML = "<img class='card' src=img/Tarot/"+ feald[i].imgPath +">";
-                cardsOnDesk[i].id = feald[i].id;
+                // cardsOnDesk[i].innerHTML = "<img class='card' src=img/Tarot/"+ feald[i].imgPath +">";
+                cardsOnDesk[i].id = "place_" + i;
                 cardsOnDesk[i].addEventListener("click", function(feald){
-                    // alert("click" + feald[i].id);
-                    console.log(this)
+                    if (active != this.children[0].getAttribute("arcana")) {
+                        active = this.children[0].getAttribute("arcana");
+                    }
+                    else {
+                        console.log("Bingo!")
+                    }
+                        console.log(this.children[0].getAttribute("arcana"))
                 });
                 desk.appendChild(cardsOnDesk[i]);
+                let imgArcana = document.createElement("img");
+                desk.children[i].appendChild(imgArcana);
+                desk.children[i].children[0].setAttribute("src", "img/Tarot/" + feald[i].imgPath);
+                desk.children[i].children[0].setAttribute("arcana", feald[i].id);
+                // desk.children.appendChild();
             }
         }
         // desk.innerHTML = cardsOnDesk[1];
