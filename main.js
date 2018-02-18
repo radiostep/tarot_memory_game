@@ -33,12 +33,20 @@ Tarot = {
         let desk = document.getElementById("theGame");
         let cardsImages = "";
         desk.className = "desk";
+        let cardsOnDesk = [];
         for ( let i = 0; i < feald.length; i++ ) {
             if (feald[i]) {
-                cardsImages = cardsImages + "<img class='card' src=img/Tarot/"+ feald[i].imgPath +">";
+                cardsOnDesk[i] = document.createElement('div');
+                cardsOnDesk[i].innerHTML = "<img class='card' src=img/Tarot/"+ feald[i].imgPath +">";
+                cardsOnDesk[i].id = feald[i].id;
+                cardsOnDesk[i].addEventListener("click", function(feald){
+                    // alert("click" + feald[i].id);
+                    console.log(this)
+                });
+                desk.appendChild(cardsOnDesk[i]);
             }
         }
-        desk.innerHTML = cardsImages;
+        // desk.innerHTML = cardsOnDesk[1];
 
         //    Буфер выборки пользователя, куда записывается
         //    активная(кликнутая) карта
