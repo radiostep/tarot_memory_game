@@ -18,5 +18,26 @@
     padding: 6px;
     margin: 12px;
     background-color: antiquewhite;
-    border-radius: 6px; 
+    border-radius: 6px;
+    background: url("img/back.jpg") no-repeat;
+    background-size: 100% 100%;
+    max-width: 150px;
+    max-height: 260px;
+}
+.card img
+{
+    opacity: 0;
+}
+.show 
+{
+    background-image: none;
+    background-color: antiquewhite;
+}
+.show  img
+{
+    opacity: 1;
+}
+.selected
+{
+    box-shadow: 0 0 20px 10px  #ffffff;
 }

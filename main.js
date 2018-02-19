@@ -27,42 +27,72 @@ Tarot = {
             feald.push(fealdBuf[random]);
             fealdBuf.splice(random, 1);
         }
-        console.log(feald);
 
 
+        let timeout = 30000;
         let desk = document.getElementById("theGame");
         let cardsImages = "";
         desk.className = "desk";
         let cardsOnDesk = [];
-        let active = -1;
+        let active = {"arcana":-1,"place":-1}; // Буфер выборки пользователя, куда записывается активная(кликнутая) карта
+        let activeCard;
         for ( let i = 0; i < feald.length; i++ ) {
             if (feald[i]) {
                 cardsOnDesk[i] = document.createElement('div');
-                // cardsOnDesk[i].innerHTML = "<img class='card' src=img/Tarot/"+ feald[i].imgPath +">";
-                cardsOnDesk[i].id = "place_" + i;
-                cardsOnDesk[i].addEventListener("click", function(feald){
-                    if (active != this.children[0].getAttribute("arcana")) {
-                        active = this.children[0].getAttribute("arcana");
+                cardsOnDesk[i].setAttribute("place", i);
+                cardsOnDesk[i].classList.add("card");
+                setTimeout(() => cardsOnDesk[i].classList.add("show"), 1000);
+                setTimeout(() => cardsOnDesk[i].classList.remove("show"), timeout);
+                
+                function game (){
+                    //    Игровое событие: совпадение или несовпадение,
+                
+                    console.log(this === activeCard)
+                    if (active.arcana == -1) {
+                        active.arcana = this.children[0].getAttribute("arcana");
+                        active.place = this.getAttribute("place");
+                        this.classList.add("selected");
+                        activeCard = this;
                     }
-                    else {
-                        console.log("Bingo!")
+                    else if (active.arcana != this.children[0].getAttribute("arcana")) {
+                        active.arcana = -1;
+                        active.place = -1;
+                        activeCard.classList.remove("selected");
+                        activeCard = undefined;
                     }
-                        console.log(this.children[0].getAttribute("arcana"))
-                });
+                    else if (active.arcana == this.children[0].getAttribute("arcana") && active.place != this.getAttribute("place")) {
+                        activeCard.classList.remove("selected");
+                        activeCard.classList.add("show");
+                        this.classList.add("show");
+                        this.removeEventListener("click", game, false);
+                        removeAllEventListenersFromElement(activeCard);
+                        // activeCard.removeEventListener("click", game, false);
+                        active.arcana = -1;
+                        active.place = -1;
+                        activeCard = undefined;
+                    }
+                }
+                setTimeout(function () {cardsOnDesk[i].addEventListener("click", game, false)}, timeout);
                 desk.appendChild(cardsOnDesk[i]);
                 let imgArcana = document.createElement("img");
                 desk.children[i].appendChild(imgArcana);
                 desk.children[i].children[0].setAttribute("src", "img/Tarot/" + feald[i].imgPath);
                 desk.children[i].children[0].setAttribute("arcana", feald[i].id);
-                // desk.children.appendChild();
             }
         }
-        // desk.innerHTML = cardsOnDesk[1];
 
-        //    Буфер выборки пользователя, куда записывается
-        //    активная(кликнутая) карта
+        function removeAllEventListenersFromElement(element) {
+            let clone = element.cloneNode();
+            // move all child elements from the original to the clone
+            while (element.firstChild) {
+                clone.appendChild(element.lastChild);
+            }
+        
+            element.parentNode.replaceChild(clone, element);
+        }
+        
 
-        //    Игровое событие: совпадение или несовпадение,
+        
         //    ведение счёта очков
 
     },
