@@ -138,18 +138,25 @@ Tarot = {
         function test (e) {
             e.preventDefault();
             e.stopPropagation();
-            if (!this.clicked) {
-                this.clicked = e.path[1];
+
+            if (e.path[1].dataset.arcana){
+                if (!this.clicked) {
+                    e.path[1].classList.add("selected");
+                    this.clicked = e.path[1];
+                }
+                else if (this.clicked != e.path[1]) {
+                    if (this.clicked.dataset.arcana == e.path[1].dataset.arcana) {
+                        this.clicked.classList.add("show");
+                        e.path[1].classList.add("show");
+                    }
+                    this.clicked.classList.remove("selected");
+                    e.path[1].classList.add("selected");
+                    this.clicked = e.path[1];
+                }
+                else {
+                    // this.clicked.innerHTML = "Clicked";
+                }
             }
-            else if (this.clicked != e.path[1]) {
-                this.clicked.innerHTML = "Clicked";
-                this.clicked = e.path[1];
-            }
-            else {
-                // this.clicked.innerHTML = "Clicked";
-            }
-            console.log(this.clicked)
-            // console.log(e.path[1]);
         }
         
         
@@ -176,6 +183,7 @@ Tarot = {
         // }
         getView(){
             this.cardView = document.createElement("div");
+            this.cardView.classList.add("card");
             this.cardView.dataset.arcana = this.arcana.id;
             this.cardView.innerHTML = "<img src='img/Tarot/" + this.arcana.imgPath + "'>";
             return this.cardView;
