@@ -22,20 +22,32 @@ Tarot = {
         
         
         */ 
-       let desk = document.getElementById("theGame");
+        // Количество мест на раскладке
+        let places = [];
+        for (let i = 0; i < 18; i++) {
+            places.push(i)
+        }
+
+        // Время на запоминание
+        let timeout = 30000;
+
+        // Карты на столе
+        let cards1 = new Array(18);
+        // Стол
+        let desk = document.getElementById("theGame");
         let cardsBuf = this.cards;
         let fealdBuf = [];
         this.clicked = undefined;
         for (let i = 0; i < 9; i++ ) {
-            let random = randomGen(cardsBuf.length);
-            let card = cardsBuf[random];
-            cardsBuf.splice(random, 1);
+            let card = new this.card(cardsBuf);
             for (let k = 0; k < 2; k++ ) {
-                fealdBuf.push(card);
+                let place = getPlace(places);
+                cards1[place] = card;
             }
-            let card1 = new this.card(cardsBuf);
-            desk.appendChild(card1.getView())
-            // console.log("id = " + card1.arcana.id);
+        }
+        // Разложить перемешанные карты на стол
+        for (let i = 0; i < cards1.length; i++) {
+            desk.appendChild(cards1[i].getView())
         }
 
         while(fealdBuf.length > 0) {
@@ -44,8 +56,14 @@ Tarot = {
             fealdBuf.splice(random, 1);
         }
 
-
-        let timeout = 30000;
+        // Получить случайное место в раскладке
+        function getPlace (places) {
+            let i = Math.floor(Math.random() * places.length);
+            let place = places[i];
+            places.splice(i, 1);
+            return place
+        }
+        
         
         let cardsImages = "";
         desk.className = "desk";
@@ -116,8 +134,10 @@ Tarot = {
         
         desk.addEventListener("click", test, false);
 
-
+        // События на столе
         function test (e) {
+            e.preventDefault();
+            e.stopPropagation();
             if (!this.clicked) {
                 this.clicked = e.path[1];
             }
@@ -140,7 +160,6 @@ Tarot = {
         constructor(cards){
             this.cards = cards;
             this.arcana = this.getArcana(this.cards);
-            
         }
 
         getArcana(cards){
@@ -150,38 +169,16 @@ Tarot = {
             cards.splice(random, 1);
             return arcana;
         }
-        getPosition(places){
-            let random = this.randomGen(places.length);
-            this.place = places[random];
-            cards.splice(random, 1);
-        }
+        // getPosition(places){
+        //     let random = this.randomGen(places.length);
+        //     this.place = places[random];
+        //     cards.splice(random, 1);
+        // }
         getView(){
-            let clickedLocalVariable = this.clicked;
-            let cardView = document.createElement("div");
-            cardView.innerHTML = "<img src='img/Tarot/" + this.arcana.imgPath + "'>";
-            // console.log(this.arcana);
-            cardView.addEventListener("click", event, false);
-
-            function event(e){
-                // console.log(this);
-                
-                console.log(clickedLocalVariable);
-                // console.log(e.path[1]);
-                // if (clicked) {
-                //     console.log(clicked);
-                //     // this.clicked.innerHTML="Remove";
-                //     clicked = e.path[1];
-                if (clickedLocalVariable) {
-                    clickedLocalVariable.removeEventListener("click", event,false);
-                }
-                clickedLocalVariable = this;    
-                // }
-                // else {
-                //     clicked = e.path[1];
-                // }
-            }
-
-            return cardView;
+            this.cardView = document.createElement("div");
+            this.cardView.dataset.arcana = this.arcana.id;
+            this.cardView.innerHTML = "<img src='img/Tarot/" + this.arcana.imgPath + "'>";
+            return this.cardView;
         }
         
         randomGen(a){
