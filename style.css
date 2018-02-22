@@ -25,9 +25,13 @@
     max-height: 260px;
     cursor: pointer;
 }
+.card:hover
+{
+    box-shadow: 0 0 20px 10px  #ffffff;
+}
 .card img
 {
-    opacity: 0;
+    opacity: 0.5;
 }
 .show 
 {

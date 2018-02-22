@@ -10,18 +10,7 @@ Tarot = {
         function randomGen(a){
             return Math.floor(Math.random() * a)
         }
-
-        /*
-        Новые идеи:
-        Экземпляр класса Card генерирует случайное место и занимает его, уничтожая элемент массива places.
-        Затем Card таким же образом берёт значение arcana зз соответствующего массива и так же удаляет это значение из массива.
-        Создаётся <div> и вешается eventListener "click"
-            Сравнение с буфером выборки, сброс буфера или запись ссылки на экземпляр класса(?)
-        Пушится в массив feald под индексом, полученным ранее из places
-
-        
-        
-        */ 
+       
         // Количество мест на раскладке
         let places = [];
         for (let i = 0; i < 18; i++) {
@@ -29,25 +18,35 @@ Tarot = {
         }
 
         // Время на запоминание
-        let timeout = 30000;
+        let timeout = 10000;
 
         // Карты на столе
-        let cards1 = new Array(18);
+        let cardsSet = new Array(18);
+
         // Стол
         let desk = document.getElementById("theGame");
+        desk.className = "desk";
+
+        //    ведение счёта очков
+        let counter = 0;
+
         let cardsBuf = this.cards;
         let fealdBuf = [];
+
+        // 
         this.clicked = undefined;
+
         for (let i = 0; i < 9; i++ ) {
             let card = new this.card(cardsBuf);
             for (let k = 0; k < 2; k++ ) {
                 let place = getPlace(places);
-                cards1[place] = card;
+                cardsSet[place] = card;
             }
         }
+
         // Разложить перемешанные карты на стол
-        for (let i = 0; i < cards1.length; i++) {
-            desk.appendChild(cards1[i].getView())
+        for (let i = 0; i < cardsSet.length; i++) {
+            desk.appendChild(cardsSet[i].getView())
         }
 
         while(fealdBuf.length > 0) {
@@ -63,79 +62,33 @@ Tarot = {
             places.splice(i, 1);
             return place
         }
-        
-        
-        // let cardsImages = "";
-        desk.className = "desk";
-        // let cardsOnDesk = [];
-        // let active = {"arcana":-1,"place":-1}; // Буфер выборки пользователя, куда записывается активная(кликнутая) карта
-        // let activeCard;
-        // for ( let i = 0; i < feald.length; i++ ) {
-        //     if (feald[i]) {
-        //         cardsOnDesk[i] = document.createElement('div');
-        //         cardsOnDesk[i].setAttribute("place", i);
-        //         cardsOnDesk[i].classList.add("card");
-        //         setTimeout(() => cardsOnDesk[i].classList.add("show"), 1000);
-        //         setTimeout(() => cardsOnDesk[i].classList.remove("show"), timeout);
-                
-        //         function game (){
-        //             //    Игровое событие: совпадение или несовпадение,
-                
-        //             if (active.arcana == -1) {
-        //                 active.arcana = this.children[0].getAttribute("arcana");
-        //                 active.place = this.getAttribute("place");
-        //                 this.classList.add("selected");
-        //                 activeCard = this;
-        //             }
-        //             else if (active.arcana != this.children[0].getAttribute("arcana")) {
-        //                 active.arcana = -1;
-        //                 active.place = -1;
-        //                 activeCard.classList.remove("selected");
-        //                 activeCard = undefined;
-        //             }
-        //             else if (active.arcana == this.children[0].getAttribute("arcana") && active.place != this.getAttribute("place")) {
-        //                 activeCard.classList.remove("selected");
-        //                 activeCard.classList.add("show");
-        //                 this.classList.add("show");
-        //                 this.removeEventListener("click", game, false);
-        //                 removeAllEventListenersFromElement(activeCard);
-        //                 // activeCard.removeEventListener("click", game, false);
-        //                 active.arcana = -1;
-        //                 active.place = -1;
-        //                 activeCard = undefined;
-        //             }
-        //         }
-        //         // setTimeout(function () {
-        //         //         cardsOnDesk[i].addEventListener("click", game, false)
-        //         //     }, timeout);
-        //         // desk.appendChild(cardsOnDesk[i]);
-        //         // let imgArcana = document.createElement("img");
-        //         // desk.children[i].appendChild(imgArcana);
-        //         // desk.children[i].children[0].setAttribute("src", "img/Tarot/" + feald[i].imgPath);
-        //         // desk.children[i].children[0].setAttribute("arcana", feald[i].id);
-        //     }
-        //     // let card1 = new this.card(cardsBuf);
-        //     // console.log(card1.getArcana(cardsBuf));
-        //     // console.log(card1.arcana);
-        //     // console.log(card1.arcana);
-            
-        // }
-        // console.log(cardsBuf);
 
-        // function removeAllEventListenersFromElement(element) {
-        //     let clone = element.cloneNode();
-        //     // move all child elements from the original to the clone
-        //     while (element.firstChild) {
-        //         clone.appendChild(element.lastChild);
-        //     }
+        // Показать/скрыть все карты
+        function showAll(desk, show) {
+            console.log(desk.children.length)
+            for (let i = 0; i < desk.children.length; i++) {
+                if (show){
+                    desk.children[i].classList.add("show");
+                }
+                else {
+                    desk.children[i].classList.remove("show");
+                }
+            }
+        }
+
         
-        //     element.parentNode.replaceChild(clone, element);
-        // }
-        
-        desk.addEventListener("click", test, false);
+        setTimeout(()=>showAll(desk, true),2000);
+
+        // Game start
+        setTimeout(() => {
+                desk.addEventListener("click", game, false);
+                showAll(desk, false);
+            }, timeout);
+
+
 
         // События на столе
-        function test (e) {
+        function game (e) {
             e.preventDefault();
             e.stopPropagation();
             if (e.target.parentNode.dataset.arcana){
@@ -152,14 +105,8 @@ Tarot = {
                     e.target.parentNode.classList.add("selected");
                     this.clicked = e.target.parentNode;
                 }
-                else {
-                    // this.clicked.innerHTML = "Clicked";
-                }
             }
         }
-        
-        
-        //    ведение счёта очков
 
     },
     card: class Card {
@@ -170,16 +117,11 @@ Tarot = {
 
         getArcana(cards){
             let random = this.randomGen(cards.length);
-            // console.log(cards.length)
             let arcana = cards[random];
             cards.splice(random, 1);
             return arcana;
         }
-        // getPosition(places){
-        //     let random = this.randomGen(places.length);
-        //     this.place = places[random];
-        //     cards.splice(random, 1);
-        // }
+
         getView(){
             this.cardView = document.createElement("div");
             this.cardView.classList.add("card");
@@ -191,13 +133,6 @@ Tarot = {
         randomGen(a){
             return Math.floor(Math.random() * a)
         }
-
-
-        // Значение
-        
-
-        // Текущая позиция
-        
 
     },
     cards:
