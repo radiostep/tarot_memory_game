@@ -65,72 +65,72 @@ Tarot = {
         }
         
         
-        let cardsImages = "";
+        // let cardsImages = "";
         desk.className = "desk";
-        let cardsOnDesk = [];
-        let active = {"arcana":-1,"place":-1}; // Буфер выборки пользователя, куда записывается активная(кликнутая) карта
-        let activeCard;
-        for ( let i = 0; i < feald.length; i++ ) {
-            if (feald[i]) {
-                cardsOnDesk[i] = document.createElement('div');
-                cardsOnDesk[i].setAttribute("place", i);
-                cardsOnDesk[i].classList.add("card");
-                setTimeout(() => cardsOnDesk[i].classList.add("show"), 1000);
-                setTimeout(() => cardsOnDesk[i].classList.remove("show"), timeout);
+        // let cardsOnDesk = [];
+        // let active = {"arcana":-1,"place":-1}; // Буфер выборки пользователя, куда записывается активная(кликнутая) карта
+        // let activeCard;
+        // for ( let i = 0; i < feald.length; i++ ) {
+        //     if (feald[i]) {
+        //         cardsOnDesk[i] = document.createElement('div');
+        //         cardsOnDesk[i].setAttribute("place", i);
+        //         cardsOnDesk[i].classList.add("card");
+        //         setTimeout(() => cardsOnDesk[i].classList.add("show"), 1000);
+        //         setTimeout(() => cardsOnDesk[i].classList.remove("show"), timeout);
                 
-                function game (){
-                    //    Игровое событие: совпадение или несовпадение,
+        //         function game (){
+        //             //    Игровое событие: совпадение или несовпадение,
                 
-                    if (active.arcana == -1) {
-                        active.arcana = this.children[0].getAttribute("arcana");
-                        active.place = this.getAttribute("place");
-                        this.classList.add("selected");
-                        activeCard = this;
-                    }
-                    else if (active.arcana != this.children[0].getAttribute("arcana")) {
-                        active.arcana = -1;
-                        active.place = -1;
-                        activeCard.classList.remove("selected");
-                        activeCard = undefined;
-                    }
-                    else if (active.arcana == this.children[0].getAttribute("arcana") && active.place != this.getAttribute("place")) {
-                        activeCard.classList.remove("selected");
-                        activeCard.classList.add("show");
-                        this.classList.add("show");
-                        this.removeEventListener("click", game, false);
-                        removeAllEventListenersFromElement(activeCard);
-                        // activeCard.removeEventListener("click", game, false);
-                        active.arcana = -1;
-                        active.place = -1;
-                        activeCard = undefined;
-                    }
-                }
-                // setTimeout(function () {
-                //         cardsOnDesk[i].addEventListener("click", game, false)
-                //     }, timeout);
-                // desk.appendChild(cardsOnDesk[i]);
-                // let imgArcana = document.createElement("img");
-                // desk.children[i].appendChild(imgArcana);
-                // desk.children[i].children[0].setAttribute("src", "img/Tarot/" + feald[i].imgPath);
-                // desk.children[i].children[0].setAttribute("arcana", feald[i].id);
-            }
-            // let card1 = new this.card(cardsBuf);
-            // console.log(card1.getArcana(cardsBuf));
-            // console.log(card1.arcana);
-            // console.log(card1.arcana);
+        //             if (active.arcana == -1) {
+        //                 active.arcana = this.children[0].getAttribute("arcana");
+        //                 active.place = this.getAttribute("place");
+        //                 this.classList.add("selected");
+        //                 activeCard = this;
+        //             }
+        //             else if (active.arcana != this.children[0].getAttribute("arcana")) {
+        //                 active.arcana = -1;
+        //                 active.place = -1;
+        //                 activeCard.classList.remove("selected");
+        //                 activeCard = undefined;
+        //             }
+        //             else if (active.arcana == this.children[0].getAttribute("arcana") && active.place != this.getAttribute("place")) {
+        //                 activeCard.classList.remove("selected");
+        //                 activeCard.classList.add("show");
+        //                 this.classList.add("show");
+        //                 this.removeEventListener("click", game, false);
+        //                 removeAllEventListenersFromElement(activeCard);
+        //                 // activeCard.removeEventListener("click", game, false);
+        //                 active.arcana = -1;
+        //                 active.place = -1;
+        //                 activeCard = undefined;
+        //             }
+        //         }
+        //         // setTimeout(function () {
+        //         //         cardsOnDesk[i].addEventListener("click", game, false)
+        //         //     }, timeout);
+        //         // desk.appendChild(cardsOnDesk[i]);
+        //         // let imgArcana = document.createElement("img");
+        //         // desk.children[i].appendChild(imgArcana);
+        //         // desk.children[i].children[0].setAttribute("src", "img/Tarot/" + feald[i].imgPath);
+        //         // desk.children[i].children[0].setAttribute("arcana", feald[i].id);
+        //     }
+        //     // let card1 = new this.card(cardsBuf);
+        //     // console.log(card1.getArcana(cardsBuf));
+        //     // console.log(card1.arcana);
+        //     // console.log(card1.arcana);
             
-        }
-        console.log(cardsBuf);
+        // }
+        // console.log(cardsBuf);
 
-        function removeAllEventListenersFromElement(element) {
-            let clone = element.cloneNode();
-            // move all child elements from the original to the clone
-            while (element.firstChild) {
-                clone.appendChild(element.lastChild);
-            }
+        // function removeAllEventListenersFromElement(element) {
+        //     let clone = element.cloneNode();
+        //     // move all child elements from the original to the clone
+        //     while (element.firstChild) {
+        //         clone.appendChild(element.lastChild);
+        //     }
         
-            element.parentNode.replaceChild(clone, element);
-        }
+        //     element.parentNode.replaceChild(clone, element);
+        // }
         
         desk.addEventListener("click", test, false);
 
@@ -138,20 +138,19 @@ Tarot = {
         function test (e) {
             e.preventDefault();
             e.stopPropagation();
-
-            if (e.path[1].dataset.arcana){
+            if (e.target.parentNode.dataset.arcana){
                 if (!this.clicked) {
-                    e.path[1].classList.add("selected");
-                    this.clicked = e.path[1];
+                    e.target.parentNode.classList.add("selected");
+                    this.clicked = e.target.parentNode;
                 }
-                else if (this.clicked != e.path[1]) {
-                    if (this.clicked.dataset.arcana == e.path[1].dataset.arcana) {
+                else if (this.clicked != e.target.parentNode) {
+                    if (this.clicked.dataset.arcana == e.target.parentNode.dataset.arcana) {
                         this.clicked.classList.add("show");
-                        e.path[1].classList.add("show");
+                        e.target.parentNode.classList.add("show");
                     }
                     this.clicked.classList.remove("selected");
-                    e.path[1].classList.add("selected");
-                    this.clicked = e.path[1];
+                    e.target.parentNode.classList.add("selected");
+                    this.clicked = e.target.parentNode;
                 }
                 else {
                     // this.clicked.innerHTML = "Clicked";
